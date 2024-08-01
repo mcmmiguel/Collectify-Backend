@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import User from '../model/User';
 import { checkPassword, hashPassword } from '../utils/auth';
+import { generateJWT } from '../utils/jwt';
 class AuthController {
     static registerUser = async (req: Request, res: Response) => {
         try {
@@ -41,8 +42,10 @@ class AuthController {
             return res.status(401).json({ error: error.message });
         }
 
-        res.send('Logged');
+        //TODO Verify .id or _id
+        const token = generateJWT({ id: user.id });
 
+        res.send(token);
     }
 }
 
