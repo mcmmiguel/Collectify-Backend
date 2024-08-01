@@ -20,8 +20,16 @@ router.post('/register',
     }),
     handleInputErrors,
     AuthController.registerUser,
-)
+);
 
+router.post('/login',
+    body('email')
+        .notEmpty().trim().isEmail().withMessage('Invalid email'),
+    body('password')
+        .notEmpty().withMessage('Password must not be empty'),
+    handleInputErrors,
+    AuthController.login,
+);
 
 
 
