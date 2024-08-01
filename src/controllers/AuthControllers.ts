@@ -47,6 +47,10 @@ class AuthController {
 
         res.send(token);
     }
+
+    static user = async (req: Request, res: Response) => {
+        // return res.json(req.user);
+    }
 }
 
 export default AuthController;
