@@ -26,12 +26,14 @@ const userSchema: Schema = new Schema({
     isBlocked: {
         type: Boolean,
         required: true,
+        default: false,
     },
     isAdmin: {
         type: Boolean,
         required: true,
+        default: false,
     },
-});
+}, { timestamps: true });
 
 const User = mongoose.model<IUser>('User', userSchema);
 export default User;
