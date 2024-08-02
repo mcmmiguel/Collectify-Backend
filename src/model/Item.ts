@@ -5,7 +5,7 @@ import Like from "./Like";
 export interface I_Item {
     itemName: string;
     description?: string;
-    collection: Types.ObjectId,
+    itemCollection: Types.ObjectId,
     image: string;
     comments: Types.ObjectId[];
     likes: Types.ObjectId[];

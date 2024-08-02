@@ -8,7 +8,7 @@ export interface IItemCollection extends Document {
     collectionName: string;
     description?: string;
     image: string;
-    items: PopulatedDoc<I_Item & Document>;
+    items: PopulatedDoc<I_Item & Document>[];
     owner: PopulatedDoc<IUser & Document>;
 };
 

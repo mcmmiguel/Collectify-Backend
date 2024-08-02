@@ -2,6 +2,7 @@ import { Router } from "express";
 import { body } from "express-validator";
 import { handleInputErrors } from "../middleware/validation";
 import AuthController from "../controllers/AuthControllers";
+import { authenticate } from "../middleware/auth";
 
 const router = Router();
 
@@ -32,7 +33,7 @@ router.post('/login',
 );
 
 router.get('/user',
-
+    authenticate,
     AuthController.user
 )
 
