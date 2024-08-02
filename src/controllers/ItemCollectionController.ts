@@ -55,6 +55,15 @@ class CollectionController {
         }
     }
 
+    static deleteCollection = async (req: Request, res: Response) => {
+        try {
+            await req.itemCollection.deleteOne();
+            res.send('Collection deleted successfully.');
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
 }
 
 export default CollectionController;

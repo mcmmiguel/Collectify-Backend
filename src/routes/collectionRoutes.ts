@@ -25,7 +25,13 @@ router.put('/:itemCollectionId',
     handleInputErrors,
     hasAuthorization,
     ItemCollectionController.updateCollection,
-)
+);
 
+router.delete('/:itemCollectionId',
+    param('itemCollectionId').isMongoId().withMessage('Invalid ID'),
+    handleInputErrors,
+    hasAuthorization,
+    ItemCollectionController.deleteCollection,
+)
 
 export default router;
