@@ -31,7 +31,7 @@ class CollectionController {
 
             if (!itemCollection) {
                 const error = new Error('The collection does not exist')
-                return res.status(404).json(error.message);
+                return res.status(404).json({ error: error.message });
             }
 
             res.json(itemCollection);
@@ -44,8 +44,8 @@ class CollectionController {
     static updateCollection = async (req: Request, res: Response) => {
         try {
             req.itemCollection.collectionName = req.body.collectionName;
-            req.itemCollection.description = req.body.description;
-            req.itemCollection.image = req.body.image;
+            req.itemCollection.description = req.body.description ?? req.itemCollection.description;
+            req.itemCollection.image = req.body.image ?? req.itemCollection.image;
 
             await req.itemCollection.save();
 

@@ -12,7 +12,7 @@ class ItemController {
             await Promise.allSettled([item.save(), req.itemCollection.save()]);
             res.send('Item created successfully.');
         } catch (error) {
-            res.status(500).json({ error: 'Hubo un error' });
+            res.status(500).json({ error: 'There was an error' });
         }
     }
 
@@ -21,7 +21,7 @@ class ItemController {
             const items = await Item.find({ itemCollection: req.itemCollection.id }).populate('itemCollection');
             res.json(items);
         } catch (error) {
-            res.status(500).json({ error: 'Hubo un error' });
+            res.status(500).json({ error: 'There was an error' });
         }
     }
 
@@ -30,7 +30,21 @@ class ItemController {
             const item = req.item;
             res.json(item);
         } catch (error) {
-            res.status(500).json({ error: 'Hubo un error' });
+            res.status(500).json({ error: 'There was an error' });
+        }
+    }
+
+    static updateItem = async (req: Request, res: Response) => {
+        try {
+            req.item.itemName = req.body.itemName;
+            req.item.description = req.body.description ?? req.item.description;
+            req.item.image = req.body.image ?? req.item.image;
+
+            await req.item.save();
+
+            res.send('Item updated');
+        } catch (error) {
+            res.status(500).json({ error: 'There was an error' });
         }
     }
 

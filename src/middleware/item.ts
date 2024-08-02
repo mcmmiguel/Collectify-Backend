@@ -19,7 +19,7 @@ export const itemExists = async (req: Request, res: Response, next: NextFunction
 
         if (!item) {
             const error = new Error('The item does not exist.');
-            return res.status(404).json(error.message);
+            return res.status(404).json({ error: error.message });
         }
 
         req.item = item;
@@ -35,8 +35,8 @@ export const itemExists = async (req: Request, res: Response, next: NextFunction
 export const itemBelongsToItemCollection = async (req: Request, res: Response, next: NextFunction) => {
 
     if (req.itemCollection._id.toString() !== req.item.itemCollection.toString()) {
-        const error = new Error('Unauthorized');
-        return res.status(403).json(error.message);
+        const error = new Error('Invalid action');
+        return res.status(403).json({ error: error.message });
     }
 
     next();

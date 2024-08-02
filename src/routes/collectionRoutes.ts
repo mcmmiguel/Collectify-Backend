@@ -52,6 +52,13 @@ router.get('/:itemCollectionId/items/:itemId',
     param('itemId').isMongoId().withMessage('Invalid ID'),
     handleInputErrors,
     ItemController.getItemById,
+);
+
+router.put('/:itemCollectionId/items/:itemId',
+    param('itemId').isMongoId().withMessage('Invalid ID'),
+    body('itemName').notEmpty().withMessage('The item name must not be empty'),
+    handleInputErrors,
+    ItemController.updateItem,
 )
 
 export default router;

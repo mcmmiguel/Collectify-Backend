@@ -1,6 +1,6 @@
-import mongoose, { Schema, Types } from "mongoose";
+import mongoose, { Document, Schema, Types } from "mongoose";
 
-export interface IComment {
+export interface IComment extends Document {
     item: Types.ObjectId;
     author: Types.ObjectId;
     comment: string;

@@ -1,8 +1,8 @@
-import mongoose, { Schema, Types } from "mongoose";
+import mongoose, { Document, Schema, Types } from "mongoose";
 import Comment from "./Comment";
 import Like from "./Like";
 
-export interface I_Item {
+export interface I_Item extends Document {
     itemName: string;
     description?: string;
     itemCollection: Types.ObjectId,
