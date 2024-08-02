@@ -5,6 +5,7 @@ import ItemCollectionController from "../controllers/ItemCollectionController";
 import { authenticate, hasAuthorization } from "../middleware/auth";
 import { itemCollectionExists } from "../middleware/itemCollection";
 import ItemController from "../controllers/ItemController";
+import { itemBelongsToItemCollection, itemExists } from "../middleware/item";
 
 const router = Router();
 
@@ -44,5 +45,13 @@ router.post('/:itemCollectionId/items',
     ItemController.createItem,
 );
 
+router.param('itemId', itemExists);
+router.param('itemId', itemBelongsToItemCollection);
+
+router.get('/:itemCollectionId/items/:itemId',
+    param('itemId').isMongoId().withMessage('Invalid ID'),
+    handleInputErrors,
+    ItemController.getItemById,
+)
 
 export default router;

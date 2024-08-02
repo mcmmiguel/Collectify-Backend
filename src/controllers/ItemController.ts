@@ -21,12 +21,17 @@ class ItemController {
             const items = await Item.find({ itemCollection: req.itemCollection.id }).populate('itemCollection');
             res.json(items);
         } catch (error) {
-            console.log(error);
+            res.status(500).json({ error: 'Hubo un error' });
         }
     }
 
     static getItemById = async (req: Request, res: Response) => {
-
+        try {
+            const item = req.item;
+            res.json(item);
+        } catch (error) {
+            res.status(500).json({ error: 'Hubo un error' });
+        }
     }
 
 }
