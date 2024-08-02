@@ -12,13 +12,14 @@ class ItemController {
             await Promise.allSettled([item.save(), req.itemCollection.save()]);
             res.send('Item created successfully.');
         } catch (error) {
-            console.log(error);
+            res.status(500).json({ error: 'Hubo un error' });
         }
     }
 
-    static getAllItems = async (req: Request, res: Response) => {
+    static getAllItemsFromCollection = async (req: Request, res: Response) => {
         try {
-
+            const items = await Item.find({ itemCollection: req.itemCollection.id }).populate('itemCollection');
+            res.json(items);
         } catch (error) {
             console.log(error);
         }

@@ -42,6 +42,7 @@ router.post('/:itemCollectionId/tasks',
     body('itemName').notEmpty().withMessage('The item name must not be empty.'),
     handleInputErrors,
     ItemController.createItem,
-)
+);
+
 
 export default router;

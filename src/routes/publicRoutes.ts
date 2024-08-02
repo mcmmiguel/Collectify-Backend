@@ -17,11 +17,11 @@ router.get('/:itemCollectionId',
     ItemCollectionController.getCollectionById,
 );
 
-router.get(':/itemCollectionId',
-    param('itemCollectionId').isMongoId().withMessage('Invalid ID'),
-    handleInputErrors,
-    itemCollectionExists,
-    ItemController.getAllItems,
+// Verify if the itemCollectionExists since here
+router.param('itemCollectionId', itemCollectionExists);
+
+router.get('/:itemCollectionId/tasks',
+    ItemController.getAllItemsFromCollection,
 );
 
 export default router;
