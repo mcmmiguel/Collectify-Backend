@@ -25,6 +25,10 @@ class ItemController {
         }
     }
 
+    static getItemById = async (req: Request, res: Response) => {
+
+    }
+
 }
 
 export default ItemController;

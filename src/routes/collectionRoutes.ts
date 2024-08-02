@@ -37,7 +37,7 @@ router.delete('/:itemCollectionId',
 
 
 // ITEMS
-router.post('/:itemCollectionId/tasks',
+router.post('/:itemCollectionId/items',
     hasAuthorization,
     body('itemName').notEmpty().withMessage('The item name must not be empty.'),
     handleInputErrors,
