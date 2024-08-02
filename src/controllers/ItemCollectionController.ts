@@ -31,7 +31,7 @@ class CollectionController {
 
             if (!itemCollection) {
                 const error = new Error('The collection does not exist')
-                res.status(404).json(error.message);
+                return res.status(404).json(error.message);
             }
 
             res.json(itemCollection);
@@ -42,17 +42,7 @@ class CollectionController {
     }
 
     static updateCollection = async (req: Request, res: Response) => {
-
-        const { itemCollectionId } = req.params;
-
         try {
-            const itemCollection = await ItemCollection.findById(itemCollectionId);
-
-            if (itemCollection.owner.toString() !== req.user.id && !req.user.isAdmin) {
-                const error = new Error('Not-valid action');
-                res.status(404).json(error.message);
-            }
-
             req.itemCollection.collectionName = req.body.collectionName;
             req.itemCollection.description = req.body.description;
             req.itemCollection.image = req.body.image;

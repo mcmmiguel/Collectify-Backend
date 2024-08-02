@@ -24,7 +24,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         if (typeof decoded === 'object' && decoded.id) {
-            const user = await User.findById(decoded.id).select('_id name email');
+            const user = await User.findById(decoded.id).select('_id name email isAdmin isBlocked');
 
             if (user) {
                 req.user = user;
@@ -36,4 +36,14 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
     } catch (error) {
         res.status(500).json({ error: 'Invalid token' });
     }
+}
+
+export const hasAuthorization = (req: Request, res: Response, next: NextFunction) => {
+
+    if ((req.user.id !== req.itemCollection.owner) && !req.user.isAdmin) {
+        const error = new Error('Invalid action');
+        return res.status(403).json({ error: error.message });
+    }
+
+    next();
 }
