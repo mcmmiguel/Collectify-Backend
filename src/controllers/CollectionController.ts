@@ -24,6 +24,23 @@ class CollectionController {
         }
     }
 
+    static getCollectionById = async (req: Request, res: Response) => {
+        const { collectionId } = req.params;
+        try {
+            const collection = await Collection.findById(collectionId);
+
+            if (!collection) {
+                const error = new Error('The collection does not exist')
+                res.status(404).json(error.message);
+            }
+
+            res.json(collection);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
 }
 
 export default CollectionController;

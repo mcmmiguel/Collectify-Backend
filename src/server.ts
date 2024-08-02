@@ -15,7 +15,7 @@ connectDB();
 server.use(express.json());
 
 server.use('/api/auth', authRouter);
-server.use('/api/collection', collectionRouter);
+server.use('/api/collections', collectionRouter);
 server.use('/api', publicRouter);
 
 export default server;
