@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import Item from '../model/Item';
+import Item, { I_Item } from '../model/Item';
 
 class ItemController {
 
@@ -42,7 +42,17 @@ class ItemController {
 
             await req.item.save();
 
-            res.send('Item updated');
+            res.send('Item updated successfully');
+        } catch (error) {
+            res.status(500).json({ error: 'There was an error' });
+        }
+    }
+
+    static deleteItem = async (req: Request, res: Response) => {
+        try {
+            req.itemCollection.items = req.itemCollection.items.filter(item => item.toString() !== req.item._id.toString());
+            await Promise.allSettled([req.item.deleteOne(), req.itemCollection.save()]);
+            res.send('Item deleted successfully');
         } catch (error) {
             res.status(500).json({ error: 'There was an error' });
         }

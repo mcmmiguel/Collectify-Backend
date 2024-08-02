@@ -55,10 +55,18 @@ router.get('/:itemCollectionId/items/:itemId',
 );
 
 router.put('/:itemCollectionId/items/:itemId',
+    hasAuthorization,
     param('itemId').isMongoId().withMessage('Invalid ID'),
     body('itemName').notEmpty().withMessage('The item name must not be empty'),
     handleInputErrors,
     ItemController.updateItem,
-)
+);
+
+router.delete('/:itemCollectionId/items/:itemId',
+    hasAuthorization,
+    param('itemId').isMongoId().withMessage('Invalid ID'),
+    handleInputErrors,
+    ItemController.deleteItem
+);
 
 export default router;
