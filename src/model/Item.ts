@@ -19,9 +19,9 @@ const itemSchema: Schema = new Schema({
     description: {
         type: String,
     },
-    collection: {
+    itemCollection: {
         type: Types.ObjectId,
-        ref: 'Collection',
+        ref: 'ItemCollection',
     },
     image: {
         type: String,

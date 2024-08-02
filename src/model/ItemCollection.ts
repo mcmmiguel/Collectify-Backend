@@ -4,7 +4,7 @@ import Item, { I_Item } from "./Item";
 import Comment from "./Comment";
 import Like from "./Like";
 
-export interface ICollection extends Document {
+export interface IItemCollection extends Document {
     collectionName: string;
     description?: string;
     image: string;
@@ -12,7 +12,7 @@ export interface ICollection extends Document {
     owner: PopulatedDoc<IUser & Document>;
 };
 
-const collectionSchema: Schema = new Schema({
+const itemCollectionSchema: Schema = new Schema({
     collectionName: {
         type: String,
         required: true,
@@ -36,7 +36,7 @@ const collectionSchema: Schema = new Schema({
 
 }, { timestamps: true });
 
-collectionSchema.pre('deleteOne', { document: true }, async function () {
+itemCollectionSchema.pre('deleteOne', { document: true }, async function () {
     const collectionId = this._id;
 
     if (!collectionId) return;
@@ -50,6 +50,6 @@ collectionSchema.pre('deleteOne', { document: true }, async function () {
     await Item.deleteMany({ collection: collectionId });
 })
 
-const Collection = mongoose.model<ICollection>('Collection', collectionSchema);
+const ItemCollection = mongoose.model<IItemCollection>('ItemCollection', itemCollectionSchema);
 
-export default Collection;
+export default ItemCollection;

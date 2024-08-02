@@ -9,8 +9,8 @@ router.get('/',
     CollectionController.getAllCollections,
 );
 
-router.get('/:collectionId',
-    param('collectionId').isMongoId().withMessage('Invalid ID'),
+router.get('/:itemCollectionId',
+    param('itemCollectionId').isMongoId().withMessage('Invalid ID'),
     handleInputErrors,
     CollectionController.getCollectionById,
 )
