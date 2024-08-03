@@ -48,12 +48,6 @@ router.post('/:itemCollectionId/items',
 router.param('itemId', itemExists);
 router.param('itemId', itemBelongsToItemCollection);
 
-router.get('/:itemCollectionId/items/:itemId',
-    param('itemId').isMongoId().withMessage('Invalid ID'),
-    handleInputErrors,
-    ItemController.getItemById,
-);
-
 router.put('/:itemCollectionId/items/:itemId',
     hasAuthorization,
     param('itemId').isMongoId().withMessage('Invalid ID'),
@@ -68,5 +62,7 @@ router.delete('/:itemCollectionId/items/:itemId',
     handleInputErrors,
     ItemController.deleteItem
 );
+
+
 
 export default router;
