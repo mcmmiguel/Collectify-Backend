@@ -1,8 +1,8 @@
-import server from "./server";
+import nodeServer from "./server";
 import colors from 'colors';
 
 const port = process.env.PORT || 4000;
 
-server.listen(port, () => {
-    console.log(colors.cyan.bold(`REST API en ${port}`));
+nodeServer.listen(port, () => {
+    console.log(colors.cyan.bold(`Server running in ${port}`));
 })
