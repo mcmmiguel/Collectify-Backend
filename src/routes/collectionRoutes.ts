@@ -2,14 +2,14 @@ import { Router } from "express";
 import { body, param } from "express-validator";
 import { handleInputErrors } from "../middleware/validation";
 import ItemCollectionController from "../controllers/ItemCollectionController";
-import { authenticate, hasAuthorization } from "../middleware/auth";
+import { authenticate, hasOwnership, verifyStatus } from "../middleware/auth";
 import { itemCollectionExists } from "../middleware/itemCollection";
 import ItemController from "../controllers/ItemController";
 import { itemBelongsToItemCollection, itemExists } from "../middleware/item";
 
 const router = Router();
 
-router.use(authenticate);
+router.use(authenticate, verifyStatus);
 
 // COLLECTIONS
 router.post('/create-collection',
@@ -25,21 +25,21 @@ router.put('/:itemCollectionId',
     param('itemCollectionId').isMongoId().withMessage('Invalid ID'),
     body('collectionName').notEmpty().withMessage('The collection name must not be empty.'),
     handleInputErrors,
-    hasAuthorization,
+    hasOwnership,
     ItemCollectionController.updateCollection,
 );
 
 router.delete('/:itemCollectionId',
     param('itemCollectionId').isMongoId().withMessage('Invalid ID'),
     handleInputErrors,
-    hasAuthorization,
+    hasOwnership,
     ItemCollectionController.deleteCollection,
 );
 
 
 // ITEMS
 router.post('/:itemCollectionId/items',
-    hasAuthorization,
+    hasOwnership,
     body('itemName').notEmpty().withMessage('The item name must not be empty.'),
     handleInputErrors,
     ItemController.createItem,
@@ -49,7 +49,7 @@ router.param('itemId', itemExists);
 router.param('itemId', itemBelongsToItemCollection);
 
 router.put('/:itemCollectionId/items/:itemId',
-    hasAuthorization,
+    hasOwnership,
     param('itemId').isMongoId().withMessage('Invalid ID'),
     body('itemName').notEmpty().withMessage('The item name must not be empty'),
     handleInputErrors,
@@ -57,7 +57,7 @@ router.put('/:itemCollectionId/items/:itemId',
 );
 
 router.delete('/:itemCollectionId/items/:itemId',
-    hasAuthorization,
+    hasOwnership,
     param('itemId').isMongoId().withMessage('Invalid ID'),
     handleInputErrors,
     ItemController.deleteItem

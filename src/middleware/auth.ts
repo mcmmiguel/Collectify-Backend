@@ -38,7 +38,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
     }
 }
 
-export const hasAuthorization = (req: Request, res: Response, next: NextFunction) => {
+export const hasOwnership = (req: Request, res: Response, next: NextFunction) => {
 
     if ((req.user.id !== req.itemCollection.owner) && !req.user.isAdmin) {
         const error = new Error('Invalid action');
@@ -46,4 +46,32 @@ export const hasAuthorization = (req: Request, res: Response, next: NextFunction
     }
 
     next();
+}
+
+export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
+
+    if (!req.user.isAdmin) {
+        const error = new Error('Unauthorized');
+        return res.status(403).json({ error: error.message });
+    }
+
+    next();
+}
+
+export const verifyStatus = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        /*  req.user = if I have JWT - This is for protected routes, less login
+            req.body = if I don't have JWT, take the email from the form - LOGIN
+            This implementation is complemented by the authentication middleware
+        */
+        const { email } = req.user || req.body;
+        const user = await User.findOne({ email });
+        if (!user) return res.status(404).json({ error: 'User not found' });
+        if (user.isBlocked) return res.status(403).json({ error: 'Account blocked. Please contact an admin to unlock it.' });
+
+        next();
+    } catch (error) {
+        console.log(error);
+        res.status(403).json({ error: 'Something went wrong' })
+    }
 }
