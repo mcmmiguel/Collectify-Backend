@@ -3,11 +3,11 @@ import dotenv from 'dotenv';
 import { createServer } from 'node:http';
 import { Server } from 'socket.io';
 import { connectDB } from './config/db';
+import { setupSocketEvents } from './events/socketEvents';
+import adminRouter from './routes/adminRoutes';
 import authRouter from './routes/authRoutes';
 import collectionRouter from './routes/collectionRoutes';
 import publicRouter from './routes/publicRoutes';
-import { setupSocketEvents } from './events/socketEvents';
-import adminRouter from './routes/adminRoutes';
 
 const server = express();
 

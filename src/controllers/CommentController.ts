@@ -3,18 +3,24 @@ import Comment, { IComment } from "../model/Comment";
 
 
 class CommentController {
-    static getAllItemComments = (socket: Socket) => {
-        const comments = Comment.find({});
-        socket.emit('comments', comments);
+    static getAllItemComments = async (socket: Socket, itemId: string) => {
+        try {
+            const comments = await Comment.find({ item: itemId }).populate('author', 'name');
+            socket.emit('loadComments', comments);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     static createComment = async (data: IComment) => {
         try {
             const comment = new Comment(data);
-            const savedComment = await comment.save();
-            return savedComment;
+            await comment.save();
+            const populatedComment = await comment.populate('author', 'name');
+            return populatedComment;
         } catch (error) {
-            console.error('Error saving comment:', error);
+            console.error(error);
+            throw new Error('Error creating comment');
         }
     }
 }
