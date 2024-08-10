@@ -40,7 +40,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 
 export const hasOwnership = (req: Request, res: Response, next: NextFunction) => {
 
-    if ((req.user.id !== req.itemCollection.owner) && !req.user.isAdmin) {
+    if ((req.user._id.toString() !== req.itemCollection.owner._id.toString()) && !req.user.isAdmin) {
         const error = new Error('Invalid action');
         return res.status(403).json({ error: error.message });
     }

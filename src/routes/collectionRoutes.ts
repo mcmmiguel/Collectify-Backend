@@ -15,6 +15,8 @@ router.use(authenticate, verifyStatus);
 router.post('/create-collection',
     body('collectionName')
         .notEmpty().withMessage('The collection name must not be empty.'),
+    body('description')
+        .notEmpty().withMessage('The collection description must not be empty.'),
     handleInputErrors,
     ItemCollectionController.createCollection
 );

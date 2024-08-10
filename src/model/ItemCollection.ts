@@ -6,7 +6,7 @@ import Like from "./Like";
 
 export interface IItemCollection extends Document {
     collectionName: string;
-    description?: string;
+    description: string;
     image: string;
     items: PopulatedDoc<I_Item & Document>[];
     owner: PopulatedDoc<IUser & Document>;
@@ -19,6 +19,7 @@ const itemCollectionSchema: Schema = new Schema({
     },
     description: {
         type: String,
+        required: true,
     },
     items: [
         {
