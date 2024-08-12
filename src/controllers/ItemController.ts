@@ -27,7 +27,10 @@ class ItemController {
 
     static getItemById = async (req: Request, res: Response) => {
         try {
-            const item = req.item;
+            const item = await Item.findById(req.item.id)
+                .populate('comments')
+                .populate('likes');
+
             res.json(item);
         } catch (error) {
             res.status(500).json({ error: 'There was an error' });

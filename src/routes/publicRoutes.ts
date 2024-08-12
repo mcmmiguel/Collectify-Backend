@@ -4,6 +4,7 @@ import ItemCollectionController from "../controllers/ItemCollectionController";
 import { handleInputErrors } from "../middleware/validation";
 import ItemController from "../controllers/ItemController";
 import { itemCollectionExists } from "../middleware/itemCollection";
+import { itemBelongsToItemCollection, itemExists } from "../middleware/item";
 
 const router = Router();
 
@@ -23,6 +24,9 @@ router.param('itemCollectionId', itemCollectionExists);
 router.get('/:itemCollectionId/items', //TODO Probablemente se deba eliminar este endpoint, al obtener la coleccion, ya tiene los items
     ItemController.getAllItemsFromCollection,
 );
+
+router.param('itemId', itemExists);
+router.param('itemId', itemBelongsToItemCollection);
 
 router.get('/:itemCollectionId/items/:itemId',
     param('itemId').isMongoId().withMessage('Invalid ID'),

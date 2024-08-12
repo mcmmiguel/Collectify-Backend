@@ -10,10 +10,8 @@ declare global {
 }
 
 export const itemExists = async (req: Request, res: Response, next: NextFunction) => {
-
-    const { itemId } = req.params;
-
     try {
+        const { itemId } = req.params;
 
         const item = await Item.findById(itemId);
 

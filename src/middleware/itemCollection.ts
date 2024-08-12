@@ -17,7 +17,7 @@ export async function itemCollectionExists(req: Request, res: Response, next: Ne
 
         if (!itemCollection) {
             const error = new Error('The collection does not exist.')
-            res.status(404).json({ error: error.message });
+            return res.status(404).json({ error: error.message });
         }
 
         req.itemCollection = itemCollection;
