@@ -17,7 +17,7 @@ class CollectionController {
 
     static getAllCollections = async (req: Request, res: Response) => {
         try {
-            const itemCollections = await ItemCollection.find({});
+            const itemCollections = await ItemCollection.find({}).populate({ path: 'owner', select: 'name' });
             res.json(itemCollections);
         } catch (error) {
             console.log(error);
