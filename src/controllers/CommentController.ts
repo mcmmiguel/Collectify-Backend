@@ -6,7 +6,7 @@ class CommentController {
     static getAllItemComments = async (socket: Socket, itemId: string) => {
         try {
             const comments = await Comment.find({ item: itemId }).populate('author', 'name');
-            socket.emit('loadComments', comments);
+            socket.emit('loadComments', { itemId, comments });
         } catch (error) {
             console.error(error);
         }

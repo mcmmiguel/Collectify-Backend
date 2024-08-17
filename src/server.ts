@@ -16,7 +16,7 @@ const server = express();
 dotenv.config();
 
 const nodeServer = createServer(server);
-const io = new Server(nodeServer);
+const io = new Server(nodeServer, { cors: corsConfig });
 
 connectDB();
 
