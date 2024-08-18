@@ -41,6 +41,16 @@ class CollectionController {
         }
     }
 
+    static getCollectionsByOwner = async (req: Request, res: Response) => {
+        const { _id } = req.user;
+        try {
+            const itemCollections = await ItemCollection.find({ owner: _id }).populate('items');
+            res.json(itemCollections);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     static updateCollection = async (req: Request, res: Response) => {
         try {
             req.itemCollection.collectionName = req.body.collectionName;

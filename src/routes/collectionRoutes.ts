@@ -21,6 +21,11 @@ router.post('/create-collection',
     ItemCollectionController.createCollection
 );
 
+router.get('/user',
+    handleInputErrors,
+    ItemCollectionController.getCollectionsByOwner
+);
+
 router.param('itemCollectionId', itemCollectionExists);
 
 router.put('/:itemCollectionId',
@@ -64,7 +69,5 @@ router.delete('/:itemCollectionId/items/:itemId',
     handleInputErrors,
     ItemController.deleteItem
 );
-
-
 
 export default router;
