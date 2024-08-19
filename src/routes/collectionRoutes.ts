@@ -17,6 +17,9 @@ router.post('/create-collection',
         .notEmpty().withMessage('The collection name must not be empty.'),
     body('description')
         .notEmpty().withMessage('The collection description must not be empty.'),
+    body('category')
+        .notEmpty().withMessage('Please, select a category.')
+        .isMongoId().withMessage('Invalid category'),
     handleInputErrors,
     ItemCollectionController.createCollection
 );
@@ -31,6 +34,11 @@ router.param('itemCollectionId', itemCollectionExists);
 router.put('/:itemCollectionId',
     param('itemCollectionId').isMongoId().withMessage('Invalid ID'),
     body('collectionName').notEmpty().withMessage('The collection name must not be empty.'),
+    body('description')
+        .notEmpty().withMessage('The collection description must not be empty.'),
+    body('category')
+        .notEmpty().withMessage('Please, select a category.')
+        .isMongoId().withMessage('Invalid category'),
     handleInputErrors,
     hasOwnership,
     ItemCollectionController.updateCollection,

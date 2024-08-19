@@ -10,6 +10,9 @@ import authRouter from './routes/authRoutes';
 import collectionRouter from './routes/collectionRoutes';
 import publicRouter from './routes/publicRoutes';
 import { corsConfig } from './config/cors';
+import i18n from './config/i18n';
+import Middleware from 'i18next-http-middleware';
+import { changeLanguage } from './middleware/language';
 
 const server = express();
 
@@ -24,6 +27,8 @@ connectDB();
 server.use(express.json());
 
 // server.use(cors(corsConfig));
+server.use(Middleware.handle(i18n));
+server.use(changeLanguage);
 
 server.use('/api/auth', authRouter);
 server.use('/api/collections', collectionRouter);

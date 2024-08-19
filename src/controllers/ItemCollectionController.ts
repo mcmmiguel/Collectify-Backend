@@ -55,6 +55,7 @@ class CollectionController {
         try {
             req.itemCollection.collectionName = req.body.collectionName;
             req.itemCollection.description = req.body.description ?? req.itemCollection.description;
+            req.itemCollection.category = req.body.category ?? req.itemCollection.category;
             req.itemCollection.image = req.body.image ?? req.itemCollection.image;
 
             await req.itemCollection.save();
