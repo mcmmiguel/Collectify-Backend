@@ -3,10 +3,12 @@ import { IUser } from "./User";
 import Item, { I_Item } from "./Item";
 import Comment from "./Comment";
 import Like from "./Like";
+import { ICategory } from "./Category";
 
 export interface IItemCollection extends Document {
     collectionName: string;
     description: string;
+    category: PopulatedDoc<ICategory & Document>;
     image: string;
     items: PopulatedDoc<I_Item & Document>[];
     owner: PopulatedDoc<IUser & Document>;
@@ -19,6 +21,11 @@ const itemCollectionSchema: Schema = new Schema({
     },
     description: {
         type: String,
+        required: true,
+    },
+    category: {
+        type: Types.ObjectId,
+        ref: 'Category',
         required: true,
     },
     items: [

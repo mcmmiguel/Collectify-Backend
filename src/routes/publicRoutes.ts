@@ -5,11 +5,16 @@ import { handleInputErrors } from "../middleware/validation";
 import ItemController from "../controllers/ItemController";
 import { itemCollectionExists } from "../middleware/itemCollection";
 import { itemBelongsToItemCollection, itemExists } from "../middleware/item";
+import CategoryController from "../controllers/CategoryController";
 
 const router = Router();
 
 router.get('/',
     ItemCollectionController.getAllCollections,
+);
+
+router.get('/categories',
+    CategoryController.getCategories,
 );
 
 router.get('/:itemCollectionId',

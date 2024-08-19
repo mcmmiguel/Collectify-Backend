@@ -23,7 +23,7 @@ connectDB();
 // Read json from form
 server.use(express.json());
 
-server.use(cors(corsConfig));
+// server.use(cors(corsConfig));
 
 server.use('/api/auth', authRouter);
 server.use('/api/collections', collectionRouter);
