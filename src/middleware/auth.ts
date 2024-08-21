@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import User, { IUser } from '../model/User';
+import i18n from '../config/i18n';
 
 declare global {
     namespace Express {
@@ -14,7 +15,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
 
     const bearer = req.headers.authorization;
     if (!bearer) {
-        const error = new Error('Unauthorized');
+        const error = new Error(i18n.t("Error_Unauthorized"));
         return res.status(401).json({ error: error.message });
     }
 
@@ -30,18 +31,18 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
                 req.user = user;
                 next();
             } else {
-                res.status(500).json({ error: 'Invalid token' });
+                res.status(500).json({ error: i18n.t("Error_InvalidToken") });
             }
         }
     } catch (error) {
-        res.status(500).json({ error: 'Invalid token' });
+        res.status(500).json({ error: i18n.t("Error_InvalidToken") });
     }
 }
 
 export const hasOwnership = (req: Request, res: Response, next: NextFunction) => {
 
     if ((req.user._id.toString() !== req.itemCollection.owner._id.toString()) && !req.user.isAdmin) {
-        const error = new Error('Invalid action');
+        const error = new Error(i18n.t("Error_InvalidAction"));
         return res.status(403).json({ error: error.message });
     }
 
@@ -51,7 +52,7 @@ export const hasOwnership = (req: Request, res: Response, next: NextFunction) =>
 export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
 
     if (!req.user.isAdmin) {
-        const error = new Error('Unauthorized');
+        const error = new Error(i18n.t("Error_Unauthorized"));
         return res.status(403).json({ error: error.message });
     }
 
@@ -66,12 +67,12 @@ export const verifyStatus = async (req: Request, res: Response, next: NextFuncti
         */
         const { email } = req.user || req.body;
         const user = await User.findOne({ email });
-        if (!user) return res.status(404).json({ error: 'User not found' });
-        if (user.isBlocked) return res.status(403).json({ error: 'Account blocked. Please contact an admin to unlock it.' });
+        if (!user) return res.status(404).json({ error: i18n.t("Error_UserNotFound") });
+        if (user.isBlocked) return res.status(403).json({ error: i18n.t("Error_AccountBlocked") });
 
         next();
     } catch (error) {
         console.log(error);
-        res.status(403).json({ error: 'Something went wrong' })
+        res.status(403).json({ error: i18n.t("Error_TryAgain") });
     }
 }

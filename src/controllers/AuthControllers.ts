@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import User from '../model/User';
 import { checkPassword, hashPassword } from '../utils/auth';
 import { generateJWT } from '../utils/jwt';
+import i18n from '../config/i18n';
 class AuthController {
     static registerUser = async (req: Request, res: Response) => {
         try {
@@ -9,7 +10,7 @@ class AuthController {
 
             const userExists = await User.findOne({ email });
             if (userExists) {
-                const error = new Error('This email is already registered');
+                const error = new Error(i18n.t("Error_EmailRegistered"));
                 return res.status(409).json({ error: error.message });
             }
 
@@ -19,9 +20,9 @@ class AuthController {
 
             await user.save();
 
-            res.send('Account created successfully. Sign in now.');
+            res.send(i18n.t("Success_CreateAccount"));
         } catch (error) {
-            res.status(500).json({ error: 'There was an error. Try again later.' });
+            res.status(500).json({ error: i18n.t("Error_TryAgain") });
         }
     }
 
@@ -31,14 +32,14 @@ class AuthController {
         const user = await User.findOne({ email });
 
         if (!user) {
-            const error = new Error('The user does not exist.');
+            const error = new Error(i18n.t("Error_UserNotFound"));
             return res.status(401).json({ error: error.message });
         }
 
         const isPasswordCorrect = await checkPassword(password, user.password);
 
         if (!isPasswordCorrect) {
-            const error = new Error('Incorrect password.');
+            const error = new Error(i18n.t("Error_IncorrectPassword"));
             return res.status(401).json({ error: error.message });
         }
 

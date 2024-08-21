@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import ItemCollection from '../model/ItemCollection';
+import i18n from '../config/i18n';
 
 class CollectionController {
 
@@ -9,45 +10,48 @@ class CollectionController {
 
         try {
             await itemCollection.save();
-            res.send('Collection created successfully');
+            res.send(i18n.t("Success_CreateCollection"));
         } catch (error) {
-            console.log(error);
+            res.status(500).json({ error: i18n.t("Error_TryAgain") });
         }
     }
 
     static getAllCollections = async (req: Request, res: Response) => {
         try {
-            const itemCollections = await ItemCollection.find({}).populate({ path: 'owner', select: 'name' });
+            const itemCollections = await ItemCollection.find({}).populate({ path: 'owner', select: 'name' }).populate('category');
             res.json(itemCollections);
         } catch (error) {
-            console.log(error);
+            res.status(500).json({ error: i18n.t("Error_TryAgain") });
         }
     }
 
     static getCollectionById = async (req: Request, res: Response) => {
         const { itemCollectionId } = req.params;
         try {
-            const itemCollection = await ItemCollection.findById(itemCollectionId).populate('items');
+            const itemCollection = await ItemCollection.findById(itemCollectionId).populate('items category').populate({
+                path: 'owner',
+                select: 'name _id'
+            });
 
             if (!itemCollection) {
-                const error = new Error('The collection does not exist')
+                const error = new Error(i18n.t("Error_CollectionDoesntExist"));
                 return res.status(404).json({ error: error.message });
             }
 
             res.json(itemCollection);
 
         } catch (error) {
-            console.log(error);
+            res.status(500).json({ error: i18n.t("Error_TryAgain") });
         }
     }
 
     static getCollectionsByOwner = async (req: Request, res: Response) => {
         const { _id } = req.user;
         try {
-            const itemCollections = await ItemCollection.find({ owner: _id }).populate('items');
+            const itemCollections = await ItemCollection.find({ owner: _id }).populate('category').populate({ path: 'owner', select: 'name' });
             res.json(itemCollections);
         } catch (error) {
-            console.log(error);
+            res.status(500).json({ error: i18n.t("Error_TryAgain") });
         }
     }
 
@@ -60,18 +64,18 @@ class CollectionController {
 
             await req.itemCollection.save();
 
-            res.send('Collection updated');
+            res.send(i18n.t("Success_UpdateCollection"));
         } catch (error) {
-            console.log(error);
+            res.status(500).json({ error: i18n.t("Error_TryAgain") });
         }
     }
 
     static deleteCollection = async (req: Request, res: Response) => {
         try {
             await req.itemCollection.deleteOne();
-            res.send('Collection deleted successfully.');
+            res.send(i18n.t("Success_DeleteCollection"));
         } catch (error) {
-            console.log(error);
+            res.status(500).json({ error: i18n.t("Error_TryAgain") });
         }
     }
 

@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { Category } from '../model/Category';
 import i18n from '../config/i18n';
 
-
 class CategoryController {
     static getCategories = async (req: Request, res: Response) => {
         try {
@@ -13,7 +12,7 @@ class CategoryController {
             }));
             return res.json(translatedCategories);
         } catch (error) {
-            res.status(500).json({ error: 'There was an error. Try again later.' });
+            res.status(500).json({ error: i18n.t("Error_TryAgain") });
         }
     }
 }

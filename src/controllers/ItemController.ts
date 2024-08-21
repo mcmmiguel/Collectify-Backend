@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import Item, { I_Item } from '../model/Item';
+import i18n from '../config/i18n';
 
 class ItemController {
 
@@ -10,9 +11,9 @@ class ItemController {
             req.itemCollection.items.push(item.id);
 
             await Promise.allSettled([item.save(), req.itemCollection.save()]);
-            res.send('Item created successfully.');
+            res.send(i18n.t("Success_CreateItem"));
         } catch (error) {
-            res.status(500).json({ error: 'There was an error' });
+            res.status(500).json({ error: i18n.t("Error_TryAgain") });
         }
     }
 
@@ -21,19 +22,16 @@ class ItemController {
             const items = await Item.find({ itemCollection: req.itemCollection.id }).populate('itemCollection');
             res.json(items);
         } catch (error) {
-            res.status(500).json({ error: 'There was an error' });
+            res.status(500).json({ error: i18n.t("Error_TryAgain") });
         }
     }
 
     static getItemById = async (req: Request, res: Response) => {
         try {
-            const item = await Item.findById(req.item.id)
-                .populate('comments')
-                .populate('likes');
-
+            const item = await Item.findById(req.item.id).populate('comments').populate('likes');
             res.json(item);
         } catch (error) {
-            res.status(500).json({ error: 'There was an error' });
+            res.status(500).json({ error: i18n.t("Error_TryAgain") });
         }
     }
 
@@ -45,9 +43,9 @@ class ItemController {
 
             await req.item.save();
 
-            res.send('Item updated successfully');
+            res.send(i18n.t("Success_UpdateItem"));
         } catch (error) {
-            res.status(500).json({ error: 'There was an error' });
+            res.status(500).json({ error: i18n.t("Error_TryAgain") });
         }
     }
 
@@ -55,9 +53,9 @@ class ItemController {
         try {
             req.itemCollection.items = req.itemCollection.items.filter(item => item.toString() !== req.item._id.toString());
             await Promise.allSettled([req.item.deleteOne(), req.itemCollection.save()]);
-            res.send('Item deleted successfully');
+            res.send(i18n.t("Success_DeleteItem"));
         } catch (error) {
-            res.status(500).json({ error: 'There was an error' });
+            res.status(500).json({ error: i18n.t("Error_TryAgain") });
         }
     }
 

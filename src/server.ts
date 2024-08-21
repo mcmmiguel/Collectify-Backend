@@ -26,7 +26,7 @@ connectDB();
 // Read json from form
 server.use(express.json());
 
-// server.use(cors(corsConfig));
+server.use(cors(corsConfig));
 server.use(Middleware.handle(i18n));
 server.use(changeLanguage);
 

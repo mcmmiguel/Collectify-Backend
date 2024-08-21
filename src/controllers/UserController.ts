@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import User from '../model/User';
+import i18n from '../config/i18n';
 
 class UserController {
     static getUsers = async (req: Request, res: Response) => {
@@ -8,7 +9,7 @@ class UserController {
             res.json(users);
         } catch (error) {
             console.log(error);
-            res.status(500).json({ error: 'Something went wrong. Try again later' });
+            res.status(500).json({ error: i18n.t("Error_TryAgain") });
         }
     }
 
@@ -22,7 +23,7 @@ class UserController {
             res.json(req.user.isBlocked);
         } catch (error) {
             console.log(error);
-            res.status(500).json({ error: 'Something went wrong. Try again later' });
+            res.status(500).json({ error: i18n.t("Error_TryAgain") });
         }
     }
 
@@ -36,7 +37,7 @@ class UserController {
             res.json(req.user.isBlocked);
         } catch (error) {
             console.log(error);
-            res.status(500).json({ error: 'Something went wrong. Try again later' });
+            res.status(500).json({ error: i18n.t("Error_TryAgain") });
         }
     }
 
@@ -50,7 +51,7 @@ class UserController {
             res.json(req.user.isAdmin);
         } catch (error) {
             console.log(error);
-            res.status(500).json({ error: 'Something went wrong. Try again later' });
+            res.status(500).json({ error: i18n.t("Error_TryAgain") });
         }
     }
 
@@ -64,17 +65,17 @@ class UserController {
             res.json(req.user.isAdmin);
         } catch (error) {
             console.log(error);
-            res.status(500).json({ error: 'Something went wrong. Try again later' });
+            res.status(500).json({ error: i18n.t("Error_TryAgain") });
         }
     }
 
     static deleteUser = async (req: Request, res: Response) => {
         try {
             await req.user.deleteOne();
-            res.json('The user has been deleted');
+            res.send("Success_DeleteUser");
         } catch (error) {
             console.log(error);
-            res.status(500).json({ error: 'Something went wrong. Try again later' });
+            res.status(500).json({ error: i18n.t("Error_TryAgain") });
         }
     }
 }

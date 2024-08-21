@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import ItemCollection, { IItemCollection } from "../model/ItemCollection";
+import i18n from "../config/i18n";
 
 declare global {
     namespace Express {
@@ -16,7 +17,7 @@ export async function itemCollectionExists(req: Request, res: Response, next: Ne
         const itemCollection = await ItemCollection.findById(itemCollectionId);
 
         if (!itemCollection) {
-            const error = new Error('The collection does not exist.')
+            const error = new Error(i18n.t("Error_CollectionDoesntExist"));
             return res.status(404).json({ error: error.message });
         }
 
@@ -24,6 +25,6 @@ export async function itemCollectionExists(req: Request, res: Response, next: Ne
 
         next();
     } catch (error) {
-        res.status(500).json({ error: 'There was an error.' })
+        res.status(500).json({ error: i18n.t("Error_TryAgain") })
     }
 }
