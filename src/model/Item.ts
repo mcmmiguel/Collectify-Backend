@@ -40,12 +40,14 @@ const itemSchema: Schema = new Schema({
     ]
 }, { timestamps: true });
 
+itemSchema.index({ likes: -1 });
+
 itemSchema.pre('deleteOne', { document: true }, async function () {
     const itemId = this._id;
     if (!itemId) return;
 
     await Promise.allSettled([Comment.deleteMany({ item: itemId }), Like.deleteMany({ item: itemId })]);
-})
+});
 
 const Item = mongoose.model<I_Item>('Item', itemSchema);
 

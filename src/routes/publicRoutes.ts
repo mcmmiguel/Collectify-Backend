@@ -17,6 +17,18 @@ router.get('/categories',
     CategoryController.getCategories,
 );
 
+router.get('/largest-collections',
+    ItemCollectionController.getLargestCollections,
+);
+
+router.get('/latest-items',
+    ItemController.getLatestItems,
+)
+
+router.get('/popular-items',
+    ItemController.getMostLikedItems,
+)
+
 router.get('/:itemCollectionId',
     param('itemCollectionId').isMongoId().withMessage('Invalid ID'),
     handleInputErrors,

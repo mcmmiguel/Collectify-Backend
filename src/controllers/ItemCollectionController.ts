@@ -25,6 +25,20 @@ class CollectionController {
         }
     }
 
+    static getLargestCollections = async (req: Request, res: Response) => {
+        try {
+            const itemCollections = await ItemCollection.find({})
+                .populate({ path: 'owner', select: 'name' })
+                .populate('category');
+
+            const sortedCollections = itemCollections.sort((a, b) => b.items.length - a.items.length).slice(0, 10);
+
+            res.json(sortedCollections);
+        } catch (error) {
+            res.status(500).json({ error: i18n.t("Error_TryAgain") });
+        }
+    }
+
     static getCollectionById = async (req: Request, res: Response) => {
         const { itemCollectionId } = req.params;
         try {

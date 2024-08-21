@@ -17,6 +17,46 @@ class ItemController {
         }
     }
 
+    static getLatestItems = async (req: Request, res: Response) => {
+        try {
+            const items = await Item.find({})
+                .sort({ createdAt: -1 })
+                .populate({
+                    path: 'itemCollection',
+                    select: 'owner collectionName',
+                    populate: {
+                        path: 'owner',
+                        select: 'name'
+                    }
+                })
+                .limit(10);
+
+            res.json(items);
+        } catch (error) {
+            res.status(500).json({ error: i18n.t("Error_TryAgain") });
+        }
+    }
+
+    static getMostLikedItems = async (req: Request, res: Response) => {
+        try {
+            const items = await Item.find({})
+                .sort({ likes: -1 })
+                .populate({
+                    path: 'itemCollection',
+                    select: 'owner collectionName',
+                    populate: {
+                        path: 'owner',
+                        select: 'name'
+                    }
+                })
+                .limit(10);
+
+            res.json(items);
+        } catch (error) {
+            res.status(500).json({ error: i18n.t("Error_TryAgain") });
+        }
+    }
+
     static getAllItemsFromCollection = async (req: Request, res: Response) => {
         try {
             const items = await Item.find({ itemCollection: req.itemCollection.id }).populate('itemCollection');
