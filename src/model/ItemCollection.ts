@@ -1,17 +1,20 @@
-import mongoose, { Document, PopulatedDoc, Schema, Types } from "mongoose";
-import { IUser } from "./User";
-import Item, { I_Item } from "./Item";
+import mongoose, { Document, Schema, Types } from "mongoose";
+import Item from "./Item";
 import Comment from "./Comment";
 import Like from "./Like";
-import { ICategory } from "./Category";
+export interface ICustomField {
+    fieldName: string;
+    fieldType: 'string' | 'number' | 'boolean' | 'date';
+}
 
 export interface IItemCollection extends Document {
     collectionName: string;
     description: string;
-    category: PopulatedDoc<ICategory & Document>;
+    category: Types.ObjectId;
     image: string;
-    items: PopulatedDoc<I_Item & Document>[];
-    owner: PopulatedDoc<IUser & Document>;
+    items: Types.ObjectId[];
+    owner: Types.ObjectId;
+    customFields: ICustomField[];
 };
 
 const itemCollectionSchema: Schema = new Schema({
@@ -41,7 +44,19 @@ const itemCollectionSchema: Schema = new Schema({
         type: Types.ObjectId,
         ref: 'User',
     },
-
+    customFields: [
+        {
+            fieldName: {
+                type: String,
+                required: true,
+            },
+            fieldType: {
+                type: String,
+                enum: ['string', 'number', 'boolean', 'date'],
+                required: true,
+            }
+        }
+    ],
 }, { timestamps: true });
 
 itemCollectionSchema.pre('deleteOne', { document: true }, async function () {

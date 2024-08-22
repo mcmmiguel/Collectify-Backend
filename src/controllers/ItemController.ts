@@ -1,12 +1,80 @@
 import { Request, Response } from 'express';
-import Item, { I_Item } from '../model/Item';
+import Item, { I_Item, ICustomFieldValue } from '../model/Item';
 import i18n from '../config/i18n';
+import { ICustomField } from '../model/ItemCollection';
+interface CustomField {
+    fieldName: string;
+    value: any;
+}
 
+const convertFieldValue = (value: any, fieldType: string) => {
+    switch (fieldType) {
+        case 'string':
+            return String(value);
+        case 'number':
+            const num = Number(value);
+            if (isNaN(num)) throw new Error('Invalid number');
+            return num;
+        case 'boolean':
+            if (typeof value === 'string') {
+                if (value.toLowerCase() === 'true') return true;
+                if (value.toLowerCase() === 'false') return false;
+            }
+            if (typeof value === 'boolean') return value;
+        case 'date':
+            const date = new Date(value);
+            if (isNaN(date.getTime())) throw new Error('Invalid date');
+            return date;
+        default:
+            throw new Error('Invalid field type');
+    }
+};
+
+function updateItemDataCustomFields(itemData: { customFields?: CustomField[] }, collectionFields: ICustomField[], customFields: CustomField[]) {
+    itemData.customFields = [];
+
+    const customFieldsMap = new Map<string, CustomField>(
+        customFields.map(field => [field.fieldName, field])
+    );
+
+    const errors = collectionFields.reduce((acc: string[], collectionField) => {
+        const { fieldName, fieldType } = collectionField;
+        const customField = customFieldsMap.get(fieldName);
+
+        if (!customField) {
+            acc.push(`${fieldName} es un campo obligatorio y no fue proporcionado.`);
+        } else {
+            try {
+                const convertedValue = convertFieldValue(customField.value, fieldType);
+                itemData.customFields.push({ fieldName, value: convertedValue });
+            } catch (error) {
+                acc.push(`Valor inválido para el campo ${fieldName}: ${error.message}`);
+            }
+        }
+
+        return acc;
+    }, []);
+
+    if (errors.length > 0) {
+        return { error: errors.join(' ') };
+    }
+
+    return { success: true };
+}
 class ItemController {
 
     static createItem = async (req: Request, res: Response) => {
         try {
-            const item = new Item(req.body);
+            const { itemCollection, body } = req;
+            const collectionFields = itemCollection.customFields;
+            const itemData = { ...body };
+            const result = updateItemDataCustomFields(itemData, collectionFields, itemData.customFields);
+            console.log(itemData);
+            if (result?.error) {
+                return res.status(500).json({ error: result.error });
+            }
+
+            const item = new Item(itemData);
             item.itemCollection = req.itemCollection.id;
             req.itemCollection.items.push(item.id);
 
@@ -80,6 +148,11 @@ class ItemController {
             req.item.itemName = req.body.itemName;
             req.item.description = req.body.description ?? req.item.description;
             req.item.image = req.body.image ?? req.item.image;
+
+            const result = updateItemDataCustomFields(req.item, req.itemCollection.customFields, req.body.customFields);
+            if (result?.error) {
+                return res.status(400).json({ error: result.error });
+            }
 
             await req.item.save();
 
