@@ -6,11 +6,15 @@ import i18n from '../config/i18n';
 const authenticateSocket = async (socket: Socket, next: (err?: any) => void) => {
     try {
         const authHeader = socket.handshake.auth.headers.Authorization;
+        console.log('Auth Header:', socket.handshake.auth.headers.Authorization);
+
         if (!authHeader) {
             return next(new Error(i18n.t("Error_Unauthorized")));
         }
 
         const token = authHeader.split(' ')[1];
+        console.log('Extracted Token:', token);
+
         if (!token) {
             return next(new Error(i18n.t("Error_Unauthorized")));
         }
