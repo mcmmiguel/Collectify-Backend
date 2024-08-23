@@ -52,7 +52,9 @@ const itemSchema: Schema = new Schema({
         value: Schema.Types.Mixed,
     }]
 }, { timestamps: true });
+
 itemSchema.index({ likes: -1 });
+itemSchema.index({ itemName: 'text', description: 'text' });
 
 itemSchema.pre('deleteOne', { document: true }, async function () {
     const itemId = this._id;
