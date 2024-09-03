@@ -10,6 +10,7 @@ import authRouter from './routes/authRoutes';
 import collectionRouter from './routes/collectionRoutes';
 import publicRouter from './routes/publicRoutes';
 import searchRouter from './routes/searchRoutes';
+import salesforceRouter from './routes/salesforceRoutes';
 import { corsConfig } from './config/cors';
 import i18n from './config/i18n';
 import Middleware from 'i18next-http-middleware';
@@ -36,6 +37,7 @@ server.use('/api/collections', collectionRouter);
 server.use('/api/public/collections', publicRouter);
 server.use('/api/admin', adminRouter);
 server.use('/api/search', searchRouter);
+server.use('/api/salesforce', salesforceRouter);
 
 setupSocketEvents(io);
 
