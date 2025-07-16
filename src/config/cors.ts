@@ -11,6 +11,7 @@ export const corsConfig: CorsOptions = {
         if (whiteList.includes(origin)) {
             callback(null, true);
         } else {
+            console.error('⛔ CORS bloqueado:', origin);
             callback(new Error('Error de CORS'));
         }
     }
